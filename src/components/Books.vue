@@ -37,8 +37,21 @@ export default {
     },
     async mounted() {
         //Code for GET Books from API
-        const response = await axios.get("http://localhost:3000/api/v1/books");
-        this.books = await response.data.data;
+        let accessToken= await localStorage.getItem('accessToken')
+        
+    if (await accessToken){
+        try {
+
+            const response = await axios.get(this.$apiUrl + "books",{ headers: {"Authorization" : `bearer ${accessToken}`} });
+            this.books = await response.data.data;
+            this.booksearch = await this.books;
+        }
+        catch{
+            this.$router.push('/login');
+        }
+        }else{
+            this.$router.push('/login');
+        }
     },
     methods: {
         SearchBook: function (searchvalue) {
@@ -46,9 +59,10 @@ export default {
         },
         async DeleteBook(bookid) {
             //HW: Code for calling API Delete Book
-            await axios.delete("http://localhost:3000/api/v1/book/" + bookid);
+            await axios.delete(this.$apiUrl + "book/" + bookid);
             var bookIndex = this.books.findIndex(x => x.bookid === bookid);
             this.books.splice(bookIndex,1);
+            console.log(bookIndex);
         },
 
     },

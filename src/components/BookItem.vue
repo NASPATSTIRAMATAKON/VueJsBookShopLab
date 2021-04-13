@@ -5,7 +5,7 @@
     <div class="container ">
         <div class="row">
             <div class="col-lg-4">
-                <img v-bind:src="book.thumbnailUrl" width="200px" /><br />
+                <img v-bind:src="require(`@/assets/bookpictures/`+ book.thumbnailUrl)" width="200px" /><br /><br />
             </div>
             <div class="col-lg-8">
 

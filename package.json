@@ -10,9 +10,12 @@
   "dependencies": {
     "axios": "^0.20.0",
     "core-js": "^3.6.5",
+    "moment": "^2.29.1",
+    "v-calendar": "^1.0.8",
     "vue": "^2.6.11",
     "vue-axios": "^3.0.1",
-    "vue-router": "^3.4.7"
+    "vue-router": "^3.4.7",
+    "vuelidate": "^0.7.6"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",

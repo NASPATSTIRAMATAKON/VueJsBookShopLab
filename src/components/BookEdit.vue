@@ -38,6 +38,28 @@
                         <option>Data Science</option>
                     </select>
                 </div>
+                 </div>
+            <div class="col-3">
+                <div class="form-group">
+                    <label for="bookimage">Book Image:</label>
+                    <UploadImage id="bookimage" name="bookimage" ref="bookimage" />
+
+                </div>
+            </div>
+
+            </div>
+        <div class="form-group row">
+            <div class="col-2">
+                <div class="form-group">
+                    <label for="price">Price:</label>
+                    <input type="number" v-model="book.price" class="form-control" id="price" placeholder="Enter Price" name="price">
+                </div>
+            </div>
+            <div class="col-2">
+                <div class="form-group">
+                    <label for="page">Pages:</label>
+                    <input type="number" v-model="book.pageCount" class="form-control" id="page" placeholder="Enter Pages" name="page">
+                </div>
             </div>
             <div class="col-3">
                 <div class="form-group">
@@ -45,16 +67,11 @@
                     <input type="text" v-model="book.isbn" class="form-control" id="ISBN" placeholder="Enter ISBN" name="ISBN">
                 </div>
             </div>
-            <div class="col">
+            <div class="col-3">
                 <div class="form-group">
-                    <label for="price">Price:</label>
-                    <input type="number" v-model="book.price" class="form-control" id="price" placeholder="Enter Price" name="price">
-                </div>
-            </div>
-            <div class="col">
-                <div class="form-group">
-                    <label for="page">Pages:</label>
-                    <input type="number" v-model="book.pageCount" class="form-control" id="page" placeholder="Enter Pages" name="page">
+                    <label for="publishedDate">Published Date:</label>
+                    <vc-date-picker v-model="book.publishedDate" mode="date" id="publishedDate" name="publishedDate" />
+
                 </div>
             </div>
         </div>
@@ -78,8 +95,13 @@
 
 <script>
 import axios from "axios";
+import UploadImage from './UploadImage';
+import moment from 'moment';
 export default {
     name: "BookEdit",
+     components: {
+         UploadImage
+    },
     data() {
         return {
             book: {}
@@ -89,10 +111,19 @@ export default {
         async SaveBook() {
 
             if (confirm("Do you want to save?")) {
+                //Save Edited Book
 
-                //HW: Code for sending edit data to API
-                await axios.put("http://localhost:3000/api/v1/book/" + this.$route.params.bookid , this.book);
-                await this.$router.push('/');
+                this.book.publishedDate = moment(String(this.book.publishedDate)).format('YYYY-MM-DD');
+                let bookimage = await this.$refs.bookimage.getFileName()
+
+                if (await bookimage !== "") {
+                    this.book.thumbnailUrl = await bookimage
+                    await this.$refs.bookimage.UploadImage();
+                }
+
+                await axios.put(this.$apiUrl + "book/" + this.$route.params.bookid, this.book);
+                await setTimeout(() => this.$router.push('/'), 500);
+
             }
 
         },
